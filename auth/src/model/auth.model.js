@@ -1,0 +1,44 @@
+const mongoose = require('mongoose')
+
+const addressScema = new mongoose.Schema({
+    address: {
+      street : String,
+      zipCode : String,
+      country  : String,
+      city : String,
+      state : String
+    }
+})
+
+const UserScema = new mongoose.Schema({
+    username : {
+        type : String,
+        required : true,
+        unique: true
+    },
+    fullName :{
+        firstName : {type : String,require:true},
+        lastName : {type : String,require:true},
+    },
+    email : {
+        type : String,
+        required : true,
+        unique: true
+    },
+    password : {
+         type : String,
+    },
+    role : {
+        type : String,
+        enum : ["user","saler"],
+        default : "user",
+    },
+    address : {
+     addressScema
+    }
+})
+
+const UserModel = mongoose.model('users',UserScema)
+
+
+module.exports=UserModel
