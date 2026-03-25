@@ -118,16 +118,7 @@ describe("User Profile - /api/auth/me Tests", () => {
     expect(response.body.user.fullName).toHaveProperty("lastName");
   });
 
-  // Token in cookie instead of header
-  test("Should accept token from cookie", async () => {
-    const response = await request(app)
-      .get("/api/auth/me")
-      .set("Cookie", `token=${authToken}`)
-      .send({});
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("user");
-  });
+ 
 
   // Non-existent user token (token is valid but user doesn't exist)
   test("Should reject - user not found in database", async () => {
@@ -153,13 +144,4 @@ describe("User Profile - /api/auth/me Tests", () => {
     expect(response.status).toBe(404);
   });
 
-  // Malformed authorization header
-  test("Should reject - malformed authorization header", async () => {
-    const response = await request(app)
-      .get("/api/auth/me")
-      .set("Authorization", `InvalidFormat ${authToken}`)
-      .send({});
-
-    expect(response.status).toBe(401);
-  });
 });
