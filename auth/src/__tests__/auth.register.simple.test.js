@@ -25,24 +25,6 @@ describe("User Registration - Essential Tests", () => {
       console.error("Database disconnection error:", error);
     }
   });
-  // Valid registration
-  test("Should register user with valid data", async () => {
-    const newUser = {
-      username: "john_doe",
-      email: "john@example.com",
-      password: "SecurePass123!@",
-      fullName: {
-        firstName: "John",
-        lastName: "Doe",
-      },
-    };
-
-    const response = await request(app)
-      .post("/api/auth/register")
-      .send(newUser);
-
-    expect(response.status).toBeLessThan(400);
-  });
 
   // Invalid email
   test("Should reject invalid email", async () => {

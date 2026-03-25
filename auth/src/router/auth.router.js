@@ -7,8 +7,7 @@ const router = express.Router()
 
 router.post('/register',middlewares.IsvalidInput, authController.Register) 
 router.post('/login',middlewares.CheckLoginInput,authController.Login)
-
-
 router.get('/me',authMiddleware,authController.GetInfo)
+router.post('/logout',authController.Logout)
 
 module.exports = router

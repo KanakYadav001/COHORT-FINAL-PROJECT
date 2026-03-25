@@ -15,7 +15,7 @@ async function Register(req, res) {
     //if user enter his email in upper case
     const lowerEmail = email.toLowerCase();
 
-    const isUserExits = await UserModel.findOne({
+    const isUserExits = await UserModel.find({
       $or: [{ email: lowerEmail }, { username }],
     });
 
@@ -142,8 +142,52 @@ async function GetInfo(req,res){
 }
 
 
+async function Logout(req,res){
+ 
+  const token = req.headers.authorization?.split(" ")[1] || req.cookies.token;
+
+  if(!token){
+    return res.status(401).json({
+      message: "Unauthorized Access ! Please Login First",
+    });
+  }
+
+  try{
+     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+     let user = await UserModel.findById(decoded.id);
+
+     if(!user){
+        return res.status(404).json({
+            message: "Unouthorized Access ! User Not Found",
+        });
+     }
+
+  } catch (error) {
+    return res.status(401).json({
+      message: "Invalid or expired token",
+    });
+  }
+
+  await redis.set(token, "blacklisted", "EX", 24 * 60 * 60);
+
+
+
+ res.clearCookie("token", {
+    httpOnly: true,
+    secure: true,
+  });
+
+  res.status(200).json({
+    message: "User Logout Successfully",
+  })
+
+}
+
+
 module.exports = {
   Register,
   Login,
-  GetInfo
+  GetInfo,
+  Logout
 };
