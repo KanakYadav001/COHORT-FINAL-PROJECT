@@ -81,7 +81,7 @@ async function Login(req, res) {
 
   const isUserExits = await UserModel.findOne({
     email: lowerEmail,
-  });
+  }).select("+password");
 
   if (!isUserExits) {
     return res.status(404).json({
