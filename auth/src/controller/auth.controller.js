@@ -121,12 +121,12 @@ async function Login(req, res) {
 
 async function GetInfo(req,res){
    
-   const user = req.user;
+   const userinfo = req.user;
 
 
-   const userInfo = await UserModel.findById(user.id).select("-password");
+   const user = await UserModel.findById(userinfo.id).select("-password");
 
-   if(!userInfo){
+   if(!user){
     return res.status(404).json({
         message: "User Not Found",
     });
@@ -134,7 +134,7 @@ async function GetInfo(req,res){
 
     res.status(200).json({
       message: "User Profile",
-      userInfo,
+      user,
     })
 
 
