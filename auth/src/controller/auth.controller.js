@@ -119,7 +119,30 @@ async function Login(req, res) {
   });
 }
 
+async function GetInfo(req,res){
+   
+   const user = req.user;
+
+
+   const userInfo = await UserModel.findById(user.id).select("-password");
+
+   if(!userInfo){
+    return res.status(404).json({
+        message: "User Not Found",
+    });
+   }
+
+    res.status(200).json({
+      message: "User Profile",
+      userInfo,
+    })
+
+
+}
+
+
 module.exports = {
   Register,
   Login,
+  GetInfo
 };
