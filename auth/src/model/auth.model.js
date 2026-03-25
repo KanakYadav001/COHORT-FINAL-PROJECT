@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
 
 const addressScema = new mongoose.Schema({
-    address: {
+    
       street : String,
       zipCode : String,
       country  : String,
       city : String,
       state : String
-    }
+    
 })
 
 const UserScema = new mongoose.Schema({
@@ -27,6 +27,7 @@ const UserScema = new mongoose.Schema({
     },
     password : {
          type : String,
+         select : false
     },
     role : {
         type : String,
