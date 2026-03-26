@@ -6,7 +6,8 @@ const addressScema = new mongoose.Schema({
       zipCode : String,
       country  : String,
       city : String,
-      state : String
+      state : String,
+      isDefault :{type : Boolean, default: false}
     
 })
 
@@ -34,9 +35,7 @@ const UserScema = new mongoose.Schema({
         enum : ["user","saler"],
         default : "user",
     },
-    address : {
-     addressScema
-    }
+    address : addressScema
 })
 
 const UserModel = mongoose.model('users',UserScema)

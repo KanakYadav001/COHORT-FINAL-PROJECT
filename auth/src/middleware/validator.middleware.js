@@ -70,8 +70,7 @@ const IsvalidInput = [
     .matches(/^[a-zA-Z\s'-]+$/)
     .withMessage(
       "First name can only contain letters, spaces, hyphens, and apostrophes",
-    )
-    .custom((value) => {
+    ).custom((value) => {
       // Prevent XSS
       if (
         value.includes("<") ||
@@ -104,6 +103,11 @@ const IsvalidInput = [
       return true;
     }),
 
+    body('role')
+    .optional()
+    .isIn(['user','seller'])
+    .withMessage("Role eather be user or seller"),
+
   IsvalidRegisterInputError,
 ];
 const CheckLoginInput = [
@@ -118,10 +122,39 @@ const CheckLoginInput = [
   IsvalidRegisterInputError,
 ];
 
-
+const ValidateAddressInput = [
+  body("street")
+    .isString()
+    .withMessage("Street must be a string")
+    .isLength({ min: 5, max: 100 })
+    .withMessage("Street must be 5-100 characters"),
+  body("city")
+    .isString()
+    .withMessage("City must be a string")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("City must be 2-50 characters"),
+  body("state")
+    .isString()
+    .withMessage("State must be a string")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("State must be 2-50 characters"),
+  body("zipCode")
+    .isString()
+    .withMessage("ZipCode must be a string")
+    .isLength({ min: 3, max: 20 })
+    .withMessage("ZipCode must be 3-20 characters")
+    .matches(/^[0-9a-zA-Z\s\-]+$/)
+    .withMessage("ZipCode contains invalid characters"),
+  body("country")
+    .isString()
+    .withMessage("Country must be a string")
+    .isLength({ min: 2, max: 50 })
+    .withMessage("Country must be 2-50 characters"),
+  IsvalidRegisterInputError,
+];
 
 module.exports = {
   IsvalidInput,
   CheckLoginInput,
- 
+  ValidateAddressInput,
 };

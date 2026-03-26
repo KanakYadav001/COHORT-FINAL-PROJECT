@@ -10,12 +10,13 @@ async function Register(req, res) {
       email,
       password,
       fullName: { firstName, lastName },
+      role
     } = req.body;
 
     //if user enter his email in upper case
     const lowerEmail = email.toLowerCase();
 
-    const isUserExits = await UserModel.find({
+    const isUserExits = await UserModel.findOne({
       $or: [{ email: lowerEmail }, { username }],
     });
 
@@ -32,6 +33,7 @@ async function Register(req, res) {
       email: lowerEmail,
       password: hashPassword,
       fullName: { firstName, lastName },
+      role
     });
 
     const token = jwt.sign(
@@ -112,7 +114,7 @@ async function Login(req, res) {
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    maxAge: 24 * 24 * 60 * 1000,
+    maxAge: 24 * 60 * 60 * 1000,
   });
 
   res.status(200).json({
@@ -184,10 +186,86 @@ async function Logout(req,res){
 
 }
 
+async function GetAddress(req,res){
+  const AddressId = req.user.id;
+
+  const user  = await UserModel.findById(AddressId).select("address");
+
+  if(!user){
+    return res.status(404).json({
+        message: "User Not Found",
+    });
+   }
+
+   res.status(200).json({
+    message: "User Address",
+    address : user.address || {}
+   })
+}
+
+async function DeleteUserAddress(req,res){
+  const userId = req.user.id;
+
+  const user = await UserModel.findById(userId);
+
+  if(!user){
+    return res.status(404).json({
+        message: "User Not Found",
+    });
+   }
+
+
+  user.address = {};
+
+  await user.save();  
+
+
+  res.status(200).json({
+    message: "User Address Deleted Successfully",
+  })
+
+}
+
+
+async function CreateUserAddress(req,res){
+  const userId = req.user.id;
+
+
+  const user = await UserModel.findById(userId);
+
+  if(!user){
+    return res.status(404).json({
+        message: "User Not Found",
+    });
+   }
+
+
+  const {street, city, state, zipCode, country} = req.body;
+
+  user.address = {
+    street,
+    city,
+    state,
+    zipCode,
+    country
+  }
+
+  await user.save();
+
+  res.status(200).json({
+    message: "User Address Created Successfully",
+    address : user.address
+  })
+
+}
+
 
 module.exports = {
   Register,
   Login,
   GetInfo,
-  Logout
+  Logout,
+  GetAddress,
+  CreateUserAddress,
+  DeleteUserAddress
 };
