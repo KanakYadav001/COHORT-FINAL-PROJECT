@@ -19,7 +19,7 @@ const productSchema = new mongoose.Schema({
     }
   },
 
-  saller: {
+  seller: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
