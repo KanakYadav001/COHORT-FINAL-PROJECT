@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-function checkRole(roles =['user']) {
+function checkRole(role = ['user']) {
  return function verifyToken(req, res, next) {
 
     const token = req.headers['authorization']?.split(' ')[1] || req.cookies?.token;
@@ -12,7 +12,7 @@ function checkRole(roles =['user']) {
     try {
         const decoded = jwt.verify(token, process.env['JWT_SECRET']);
 
-        if(!roles.includes(decoded.role)) {
+        if(!role.includes(decoded.role)) {
             return res.status(403).json({ message: 'Forbidden' });
         }
         req.user= decoded;

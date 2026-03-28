@@ -32,7 +32,7 @@ const UserScema = new mongoose.Schema({
     },
     role : {
         type : String,
-        enum : ["user","saler"],
+        enum : ["user","seller"],
         default : "user",
     },
     address : addressScema

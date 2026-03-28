@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const productSchema = new mongoose.Schema({
-  name: {
+  title: {
     type: String,
     required: true,
   },
@@ -11,7 +11,7 @@ const productSchema = new mongoose.Schema({
   },
 
   price: {
-    Amount: { type: Number, required: true },
+    amount: { type: Number, required: true },
     currency: {
       type: String,
       enum: ["USD", "INR"],
@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema({
 
   images: [{
     url: String,
-    thumnail: String,
+    thumbnail: String,
     id: String,
   }]
 

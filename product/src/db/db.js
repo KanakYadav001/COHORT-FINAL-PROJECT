@@ -3,7 +3,7 @@ const mongoose  = require('mongoose');
 
 async function connectDB() {
    try {
-    await mongoose.connect(process.env.MONGO_URL)
+    await mongoose.connect(process.env.DB_URL)
     console.log('Connected to MongoDB');
 
    }catch (error) {
