@@ -155,7 +155,62 @@ async function updateProduct(req, res) {
   });
 }
 
+async function deleteProduct(req, res) {
+  const { id } = req.params;
 
+
+
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ message: "Invalid Product id" });
+  }
+
+
+
+  const product = await ProductModel.findOne({
+    _id: id,
+    seller: req.user.id,
+  });
+
+  if (!product) {
+    return res.status(404).json({ message: "Product not found" });
+  }
+
+
+  if (product.seller.toString() !== req.user.id) {
+    return res
+      .status(403)
+      .json({ message: "Forbidden  : You are not the seller of this product" });
+  }
+
+ const deletedProduct = await ProductModel.findOneAndDelete({ _id: id });
+
+
+ 
+
+
+  res.status(200).json({
+    message: "Product deleted successfully",
+    product: deletedProduct,
+  });
+
+
+}
+
+
+async function showProducts(req, res) {
+  const seller = req.user
+  const { skip = 0, limit = 20 } = req.query;
+
+  const products = await ProductModel.find({ seller: seller.id })
+    .skip(Number(skip))
+    .limit(Math.min(Number(limit), 20));
+  
+  res.status(200).json({
+    message: "Products fetched successfully",
+    products,
+  });
+
+}
 
 
 module.exports = {
@@ -163,4 +218,6 @@ module.exports = {
   getAllProducts,
   getProductById,
   updateProduct,
+  deleteProduct,
+  showProducts
 };

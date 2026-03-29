@@ -8,7 +8,9 @@ const upload = multer({storage: multer.memoryStorage()});
 
 router.post('/',upload.any([{ name: 'images', maxCount: 5 }]), middleware.checkRole(['seller','user']),ProductController.createProduct);
 router.get('/', ProductController.getAllProducts);
-router.get('/:id',ProductController.getProductById);
 router.patch('/:id',middleware.checkRole(['seller']), ProductController.updateProduct);
+router.delete('/:id',middleware.checkRole(['seller']) , ProductController.deleteProduct);
+router.get('/show', ProductController.showProducts);
 
+router.get('/:id',ProductController.getProductById);
 module.exports = router;
