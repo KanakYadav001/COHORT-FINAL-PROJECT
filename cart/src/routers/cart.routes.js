@@ -21,4 +21,7 @@ router.post(
 
 router.get('/',CartAutMiddleWare(["user"]),CartController.getCart)
 
+router.delete("/items/:productId", CartAutMiddleWare(["user"]), CartController.deleteCartItem);
+router.delete("/clearCart", CartAutMiddleWare(["user"]), CartController.clearCart);
+
 module.exports = router;

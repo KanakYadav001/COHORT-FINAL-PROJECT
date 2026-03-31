@@ -25,6 +25,15 @@ jest.mock("../controller/cart.controller", () => {
         },
       });
     }),
+    // Provide no-op handlers so router.delete() receives functions
+    deleteCartItem: jest.fn((req, res) =>
+      res.status(500).json({ message: "DELETE handler not used in GET tests" }),
+    ),
+    clearCart: jest.fn((req, res) =>
+      res
+        .status(500)
+        .json({ message: "clearCart handler not used in GET tests" }),
+    ),
   };
 });
 

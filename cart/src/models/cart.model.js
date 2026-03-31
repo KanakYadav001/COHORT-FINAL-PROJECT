@@ -8,7 +8,7 @@ const CartScema = new mongoose.Schema({
         required : true
     },
 
-    item : {
+    item : [{
         productId : {
             type : mongoose.Schema.Types.ObjectId,
             required : true
@@ -18,7 +18,7 @@ const CartScema = new mongoose.Schema({
             required : true,
             min : 1
         }
-    }
+  }]
 
 
 
