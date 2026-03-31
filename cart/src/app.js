@@ -5,7 +5,7 @@ const app = express();
 app.use(express.json());
 
 
-app.use('/api',CartRouter)
+app.use('/api/cart',CartRouter)
 
 
 module.exports = app
