@@ -18,4 +18,7 @@ router.post(
   CartController.cart,
 );
 
+
+router.get('/',CartAutMiddleWare(["user"]),CartController.getCart)
+
 module.exports = router;
