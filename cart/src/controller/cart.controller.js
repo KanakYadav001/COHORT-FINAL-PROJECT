@@ -1,9 +1,11 @@
 const cartModel = require("../models/cart.model");
 const mongoose = require("mongoose");
-async function cart(req, res) {
+
+
+async function createCart(req, res) {
   try {
     const { productId, quantity } = req.body;
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const qty = Number(quantity);
 
@@ -46,7 +48,7 @@ async function UpdateCart(req, res) {
   try {
     const { productId } = req.params;
     const { quantity } = req.body;
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const qty = Number(quantity);
 
@@ -113,33 +115,22 @@ async function getCart(req, res) {
 }
 async function deleteCartItem(req, res) {
   try {
-    const { productId } = req.params;
-    const userId = req.user._id;
+    const userId = req.user.id;
+    const {Id} = req.params;
 
-    if (!mongoose.Types.ObjectId.isValid(productId)) {
-      return res.status(400).json({ message: "Invalid productId" });
+    if (!mongoose.Types.ObjectId.isValid(Id)) {
+      return res.status(400).json({ message: "Invalid Cart Id" });
     }
-    const cartItem = await cartModel.findOne({ user: userId });
+
+    const cartItem = await cartModel.findOneAndDelete({ _id: Id, user: userId });
 
     if (!cartItem) {
       return res.status(404).json({ message: "Cart not found" });
     }
 
-    const itemExists = cartItem.item.some(
-      (item) => item.productId.toString() === productId,
-    );
-    if (!itemExists) {
-      return res.status(404).json({ message: "Product not found in cart" });
-    }
+    return res.status(200).json({ message: "Cart item deleted successfully" });
 
-    cartItem.item = cartItem.item.filter(
-      (item) => item.productId.toString() !== productId,
-    );
-    await cartItem.save();
 
-    res
-      .status(200)
-      .json({ message: "Cart item deleted successfully", cart: cartItem });
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
   }
@@ -147,7 +138,7 @@ async function deleteCartItem(req, res) {
 
 async function clearCart(req, res) {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
 
     const cartItem = await cartModel.findOne({ user: userId });
 
@@ -165,7 +156,7 @@ async function clearCart(req, res) {
 }
 
 module.exports = {
-  cart,
+  createCart,
   UpdateCart,
   getCart,
   clearCart,
