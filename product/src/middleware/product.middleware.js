@@ -1,9 +1,8 @@
 const jwt = require("jsonwebtoken");
 
-function checkRole(role = ["user"]) {
+function checkRole(role = ["seller"]) {
   return function verifyToken(req, res, next) {
-    const token =
-      req.headers["authorization"]?.split(" ")[1] || req.cookies?.token;
+    const token = req.headers["authorization"]?.split(" ")[1] || req.cookies?.token;
 
     if (!token) {
       return res.status(401).json({ message: "No token provided" });
@@ -18,6 +17,8 @@ function checkRole(role = ["user"]) {
       req.user = decoded;
       next();
     } catch (error) {
+      console.log(error.message);
+      
       return res.status(401).json({ message: "Invalid token" });
     }
   };

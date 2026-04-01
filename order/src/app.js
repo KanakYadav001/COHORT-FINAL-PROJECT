@@ -7,7 +7,7 @@ app.use(cookieParser());
 
 
 
-app.use('/api/order', OrderRoute);
+app.use('/api', OrderRoute);
 
 
 

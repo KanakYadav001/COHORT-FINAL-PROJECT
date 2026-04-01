@@ -86,20 +86,28 @@ async function UpdateCart(req, res) {
 
 async function getCart(req, res) {
   try {
-    const userId = req.user._id;
+    const userId = req.user.id;
 
-    const cartItem = await cartModel
-      .findOne({ user: userId })
-      .populate("item.productId");
+    let cartItem = await cartModel
+      .findOne({ user: userId });
 
     if (!cartItem) {
-      return res.status(404).json({ message: "Cart not found" });
+     cartItem = new cartModel({
+        user: userId,
+        item: [],
+      });
+      await cartItem.save();
     }
+
+
     return res.status(200).json({
       message: "Cart retrieved successfully",
-      cart: cartItem,
+      itemCount : cartItem.item.length,
+      itemQuantity : cartItem.item.reduce((total, item) => total + item.quantity, 0),
     });
   } catch (error) {
+    console.log(error.message);
+    
     return res.status(500).json({ message: "Internal server error" });
   }
 }

@@ -4,7 +4,7 @@ const uploadImage = require("../services/imagekit.services");
 
 async function createProduct(req, res) {
   try {
-    const { title, description, amount, currency } = req.body;
+    const { title, description, amount, currency ,stock} = req.body;
 
     const files = req.files;
 
@@ -34,6 +34,7 @@ async function createProduct(req, res) {
       price: { amount: NumAmount, currency },
       seller: seller,
       images: imagesUploaded,
+      stock: Number(stock),
     });
 
     res
@@ -129,7 +130,7 @@ async function updateProduct(req, res) {
       .json({ message: "Forbidden  : You are not the seller of this product" });
   }
 
-  const allowedFields = ["title", "description", "price"];
+  const allowedFields = ["title", "description", "price", "stock"];
 
   for (const key of Object.keys(req.body)) {
     if (allowedFields.includes(key)) {
