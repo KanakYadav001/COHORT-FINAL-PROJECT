@@ -199,10 +199,14 @@ async function deleteProduct(req, res) {
 
 
 async function showProducts(req, res) {
-  const seller = req.user
+  
+  const seller = req.user.id
+
+  console.log(seller);
+  
   const { skip = 0, limit = 20 } = req.query;
 
-  const products = await ProductModel.find({ seller: seller.id })
+  const products = await ProductModel.find({ seller })
     .skip(Number(skip))
     .limit(Math.min(Number(limit), 20));
   

@@ -35,7 +35,7 @@ const UserScema = new mongoose.Schema({
         enum : ["user","seller"],
         default : "user",
     },
-    address : addressScema
+    address : [addressScema]
 })
 
 const UserModel = mongoose.model('users',UserScema)
