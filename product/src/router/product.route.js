@@ -18,4 +18,5 @@ router.delete('/:id',middleware.checkRole(['seller']) , ProductController.delete
 router.get('/show',middleware.checkRole(['seller']), ProductController.showProducts);
 
 router.get('/:id',ProductController.getProductById);
+
 module.exports = router;

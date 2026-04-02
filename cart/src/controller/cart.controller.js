@@ -104,8 +104,7 @@ async function getCart(req, res) {
 
     return res.status(200).json({
       message: "Cart retrieved successfully",
-      itemCount : cartItem.item.length,
-      itemQuantity : cartItem.item.reduce((total, item) => total + item.quantity, 0),
+      cart: cartItem,
     });
   } catch (error) {
     console.log(error.message);
