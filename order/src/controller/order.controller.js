@@ -66,7 +66,7 @@ async function createOrder(req, res) {
 
     });
 
-    res.status(201).json({ success: true, message: "Order created successfully", order });
+    res.status(201).json({ message: "Order created successfully", order });
 
 
   } catch (err) {
@@ -77,6 +77,101 @@ async function createOrder(req, res) {
   }
 }
 
+
+async function getOrderById(req, res) {
+  const orderId = req.params.id;
+
+  try {
+    const order = await OrderModel.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+    res.status(200).json({ message : "Order retrieved successfully", order });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+
+}
+
+async function getAllOrders(req, res) {
+  const userId = req.user.id;
+
+  try {
+    const orders = await OrderModel.find({ user: userId });
+
+   if(!orders){
+    return res.status(404).json({ message: "You have no orders yet" });
+   }
+
+    res.status(200).json({ message: "Orders retrieved successfully", orders });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+
+}
+
+async function cancelOrder(req, res) {
+  const orderId = req.params.id;
+
+  try {
+    const order = await OrderModel.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+    if (order.status === "CANCELLED") {
+      return res.status(400).json({ success: false, message: "Order is already cancelled" });
+    }
+
+    if (order.status === "PAID" || order.status === "SHIPPED") {
+      return res.status(400).json({ success: false, message: "Cannot cancel an order that is already paid or shipped" });
+    }
+
+
+    order.status = "CANCELLED";
+    await order.save();
+
+    res.status(200).json({message: "Order cancelled successfully" });
+
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+
+}
+
+async function updateOrderAddress(req, res) {
+
+  const orderId = req.params.id;
+  const { address } = req.body;
+
+  try {
+    const order = await OrderModel.findById(orderId);
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found" });
+    }
+
+    order.address = address;
+    await order.save();
+
+    res.status(200).json({ message: "Order address updated successfully", order });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+
+}
+
 module.exports = {
   createOrder,
+  getOrderById,
+  getAllOrders,
+  cancelOrder,
+  updateOrderAddress,
 };

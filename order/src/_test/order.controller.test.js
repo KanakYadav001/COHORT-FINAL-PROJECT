@@ -117,7 +117,6 @@ describe("POST /api/order - Create Order", () => {
       .send({ address: mockAddress });
 
     expect(response.status).toBe(201);
-    expect(response.body.success).toBe(true);
     expect(response.body.message).toBe("Order created successfully");
   });
 
