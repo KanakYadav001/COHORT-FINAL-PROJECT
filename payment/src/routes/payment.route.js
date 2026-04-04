@@ -4,6 +4,6 @@ const PaymentAuthMiddleware = require('../middleware/paymentAuth.middleware');
 const PaymentController = require('../controller/payment.controller');
 
 router.post('/create/:id', PaymentAuthMiddleware(["user"]), PaymentController.createPayment);
-// router.post('/verify', PaymentAuthMiddleware(["user"]), PaymentController.verifyPayment);
+router.post('/verify', PaymentAuthMiddleware(["user"]), PaymentController.verifyPayment);
 
 module.exports = router;

@@ -24,6 +24,19 @@ const PaymentSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     required: true,
   },
+  price : {
+    amount: {
+      type: Number,
+      required: true,
+  },
+  currency: {
+      type: String,
+      required: true,
+      default: "INR",
+  }
+  }
+},{
+  timestamps: true,
 });
 
 const paymentModel = mongoose.model("Payment", PaymentSchema);
