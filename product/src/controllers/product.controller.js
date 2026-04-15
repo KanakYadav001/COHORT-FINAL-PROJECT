@@ -69,7 +69,7 @@ async function getAllProducts(req, res) {
   }
 
   if (maxPrice) {
-    filter[`price.amount.amount`] = {
+    filter[`price.amount`] = {
       ...filter["price.amount"],
       $lte: Number(maxPrice),
     };
@@ -209,6 +209,7 @@ async function showProducts(req, res) {
   const products = await ProductModel.find({ seller })
     .skip(Number(skip))
     .limit(Math.min(Number(limit), 20));
+
   
   res.status(200).json({
     message: "Products fetched successfully",

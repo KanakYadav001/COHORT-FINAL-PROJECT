@@ -14,7 +14,7 @@ router.patch(
 router.post(
   "/items",
   CartValidator.validateCartItem,
-  CartAutMiddleWare(["user"]),
+  // CartAutMiddleWare(["user"]),
   CartController.createCart,
 );
 

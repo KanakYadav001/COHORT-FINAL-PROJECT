@@ -119,6 +119,7 @@ async function Login(req, res) {
 
   res.status(200).json({
     message: "User Login Sucessfully",
+    token
   });
 }
 
@@ -138,6 +139,7 @@ async function GetInfo(req,res){
     res.status(200).json({
       message: "User Profile",
       user,
+       
     })
 
 

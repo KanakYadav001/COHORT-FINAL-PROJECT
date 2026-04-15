@@ -7,6 +7,8 @@ const router = express.Router();
 const upload = multer({storage: multer.memoryStorage()});
 
 router.post('/',upload.any([{ name: 'images', maxCount: 5 }]), middleware.checkRole(['seller','user']),ProductController.createProduct);
+
+
 router.get('/', ProductController.getAllProducts);
 
 
