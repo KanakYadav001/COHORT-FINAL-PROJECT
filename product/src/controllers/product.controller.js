@@ -53,36 +53,42 @@ async function createProduct(req, res) {
 }
 
 async function getAllProducts(req, res) {
-  const { q, minPrice, maxPrice, skip = 0, limit = 20 } = req.query;
+  try {
+    const { q, minPrice, maxPrice, skip = 0, limit = 20 } = req.query;
 
-  const filter = {};
+    const filter = {};
 
-  if (q) {
-    filter.$text = { $search: q };
+    if (q && typeof q === 'string' && q.trim()) {
+      filter.$text = { $search: q.trim() };
+    }
+
+    if (minPrice || maxPrice) {
+      filter['price.amount'] = {};
+      if (minPrice && !isNaN(minPrice) && Number(minPrice) >= 0) {
+        filter['price.amount'].$gte = Number(minPrice);
+      }
+      if (maxPrice && !isNaN(maxPrice) && Number(maxPrice) >= 0) {
+        filter['price.amount'].$lte = Number(maxPrice);
+      }
+    }
+
+    const skipNum = Math.max(0, Number(skip));
+    const limitNum = Math.min(Math.max(1, Number(limit)), 20);
+
+    const product = await ProductModel.find(filter)
+      .skip(skipNum)
+      .limit(limitNum);
+
+    res.status(200).json({
+      message: "Product Fetched Successfully",
+      product,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching products",
+      error: error.message,
+    });
   }
-
-  if (minPrice) {
-    filter[`price.amount`] = {
-      ...filter["price.amount"],
-      $gte: Number(minPrice),
-    };
-  }
-
-  if (maxPrice) {
-    filter[`price.amount`] = {
-      ...filter["price.amount"],
-      $lte: Number(maxPrice),
-    };
-  }
-
-  const product = await ProductModel.find(filter)
-    .skip(Number(skip))
-    .limit(Math.min(Number(limit), 20));
-
-  res.status(200).json({
-    message: "Product Fetch Sucessfully",
-    product,
-  });
 }
 
 async function getProductById(req, res) {

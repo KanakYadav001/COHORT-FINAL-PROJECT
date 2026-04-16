@@ -9,7 +9,7 @@ async function createCart(req, res) {
 
     const qty = Number(quantity);
 
-    if (!productId || !qty || qty < 1) {
+    if (!productId || isNaN(qty) || qty < 1) {
       return res
         .status(400)
         .json({ message: "productId and quantity are required" });
@@ -40,7 +40,7 @@ async function createCart(req, res) {
     await cartItem.save();
     return res
       .status(200)
-      .json({ message: "Cart item added successfully", cart: cartItem });
+      .json({ message: "Cart item added successfully", data: cartItem });
   } catch (error) {return res.status(500).json({ message: "Internal server error" });
   }
 }
