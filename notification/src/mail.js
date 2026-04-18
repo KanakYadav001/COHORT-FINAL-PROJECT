@@ -38,4 +38,4 @@ const sendEmail = async (to, subject, text, html) => {
     console.error('Error sending email:', error);
   }
 };
-module.exports = sendEmail ;
+module.exports ={ sendEmail} ;
