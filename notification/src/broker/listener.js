@@ -10,4 +10,25 @@ module.exports = function listernToQueue() {
      await sendEmail(data.email, "Welcome to Our Service", "Congratulations!", structureEmail);
 
     });
+
+
+    subcribeToQueue("payment_success_notification.user",async (data) => {
+      const structureEmail  = `
+      <h1>Payment Successful</h1>
+      <p>Your payment of ${data.price.amount} ${data.price.currency} has been processed successfully.</p>
+      <p>Thank you for your purchase!</p>
+      <p> Your order ID is ${data.rozopayOrderId} and payment ID is ${data.rozopayPaymentId}.</p>
+      <p>Best regards,<br>Easy Shop</p>
+    })`
+
+    subcribeToQueue("payment_failed_notification.user",async (data) => {
+      const structureEmail  = `
+      <h1>Payment Failed of ${data.rozopayOrderId}</h1>
+      <p>We're sorry, but your payment of ${data.price.currency} ${data.price.amount} failed.</p>
+      <p>Please try again or contact our support team for assistance.</p>
+      <p>Best regards,<br>Easy Shop</p>`
+
+        await sendEmail(data.email, "Payment Failed", "Payment Unsuccessful", structureEmail);
+    });
+  });
 };
