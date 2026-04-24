@@ -8,12 +8,12 @@ process.env.JWT_SECRET_KEY =
   process.env.JWT_SECRET_KEY || "test_secret_key_12345";
 
 // Mock OrderModel BEFORE requiring routes
-jest.mock("../model/cart.model");
+jest.mock("../model/order.model");
 
 // DO NOT mock authMiddleware - use the real one!
 // This way token verification works consistently across all tests
 
-const OrderModel = require("../model/cart.model");
+const OrderModel = require("../model/order.model");
 const OrderController = require("../controller/order.controller");
 const orderRouter = require("../router/order.route");
 

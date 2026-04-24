@@ -1,4 +1,5 @@
- const amqplib = require('amqplib');
+
+const amqplib = require('amqplib');
 
  let connection, channel;
 

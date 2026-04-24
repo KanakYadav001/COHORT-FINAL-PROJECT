@@ -3,7 +3,7 @@ const request = require("supertest");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const express = require("express");
-const OrderModel = require("../model/cart.model");
+const OrderModel = require("../model/order.model");
 const authMiddleware = require("../middleware/orderAuth.middleware");
 const {
   validateCreateOrder,
@@ -15,7 +15,7 @@ const OrderController = require("../controller/order.controller");
 jest.mock("axios");
 
 // Mock OrderModel
-jest.mock("../model/cart.model");
+jest.mock("../model/order.model");
 
 // Create Express app for testing
 const app = express();
