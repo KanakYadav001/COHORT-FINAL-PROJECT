@@ -1,6 +1,7 @@
 const { default: mongoose } = require("mongoose");
 const ProductModel = require("../models/product.model");
 const uploadImage = require("../services/imagekit.services");
+const { publishToQueue } = require("../broker/broker");
 
 async function createProduct(req, res) {
   try {
@@ -29,6 +30,7 @@ async function createProduct(req, res) {
 
     // Create product with uploaded image
     const product = await ProductModel.create({
+      email: req.user.email,
       title,
       description,
       price: { amount: NumAmount, currency },
@@ -36,6 +38,9 @@ async function createProduct(req, res) {
       images: imagesUploaded,
       stock: Number(stock),
     });
+
+    await publishToQueue("product_created_for_seller", product);
+    await publishToQueue("product_notified_for_seller", product);
 
     res
       .status(201)

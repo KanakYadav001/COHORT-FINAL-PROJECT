@@ -1,4 +1,5 @@
- const amqplib = require('amqplib');
+
+const amqplib = require('amqplib');
 
  let connection, channel;
 
@@ -19,12 +20,11 @@
     if(!channel || !connection) await connect();
     await channel.assertQueue(queueName, { durable: true });
     await channel.sendToQueue(queueName, Buffer.from(JSON.stringify(data)));
+    console.log(`Message sent to queue ${queueName}:`, data);
  }
-
-
-
 
  module.exports = {
     connect,
     publishToQueue,
+
 }

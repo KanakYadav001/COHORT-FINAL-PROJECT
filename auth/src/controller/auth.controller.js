@@ -38,14 +38,16 @@ async function Register(req, res) {
     });
 
 
-      await publishToQueue("user_registered_notification.user", {
+    await Promise.all([
+       publishToQueue("user_registered_notification.user", {
         userId: user._id,
         email: user.email,
         username: user.username,
         fullName: user.fullName,
-      })
-
-      
+      }),
+  
+       publishToQueue("user_created_for_seller", user)
+    ])
     const token = jwt.sign(
       {
         id: user._id,
@@ -55,14 +57,14 @@ async function Register(req, res) {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "7d",
       },
     );
 
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 7* 24 * 60 * 60 * 1000,
     });
 
     res.status(200).json({
@@ -118,13 +120,13 @@ async function Login(req, res) {
       role: isUserExits.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "1d" },
+    { expiresIn: "7d" },
   );
 
   res.cookie("token", token, {
     httpOnly: true,
     secure: true,
-    maxAge: 24 * 60 * 60 * 1000,
+    maxAge: 7 * 24 * 60 * 60 * 1000,
   });
 
   res.status(200).json({

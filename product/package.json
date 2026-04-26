@@ -4,11 +4,12 @@
     "test:watch": "jest --watch"
   },
   "devDependencies": {
-    "supertest": "^6.3.3",
-    "jest": "^29.7.0"
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "@imagekit/nodejs": "^7.3.0",
+    "amqplib": "^1.0.3",
     "bcryptjs": "^3.0.3",
     "cookie-parser": "^1.4.7",
     "dotenv": "^17.3.1",

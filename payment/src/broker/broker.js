@@ -23,22 +23,10 @@
  }
 
 
- async function subcribeToQueue(queueName, callback) {
-    if(!channel || !connection) await connect();
-    await channel.assertQueue(queueName, { durable: true });
 
-    channel.consume(queueName, async(msg) => {
-        if (msg !== null) {
-            const data = JSON.parse(msg.content.toString());
-           await callback(data);
-            channel.ack(msg);
-        }
-    });
-
- }
 
  module.exports = {
     connect,
     publishToQueue,
-    subcribeToQueue
+  
 }

@@ -1,5 +1,7 @@
 const { subcribeToQueue } = require("./broker");
 const {sendEmail} = require('../mail');
+
+
 module.exports = function listernToQueue() {
   subcribeToQueue("user_registered_notification.user",async (data) => {
      const structureEmail  = `
@@ -18,8 +20,10 @@ module.exports = function listernToQueue() {
       <p>Your payment of ${data.price.amount} ${data.price.currency} has been processed successfully.</p>
       <p>Thank you for your purchase!</p>
       <p> Your order ID is ${data.rozopayOrderId} and payment ID is ${data.rozopayPaymentId}.</p>
-      <p>Best regards,<br>Easy Shop</p>
-    })`
+      <p>Best regards,<br>Easy Shop</p>`
+
+        await sendEmail(data.email, "Payment Successful", "Congratulations!", structureEmail);
+    })
 
     subcribeToQueue("payment_failed_notification.user",async (data) => {
       const structureEmail  = `
@@ -30,5 +34,19 @@ module.exports = function listernToQueue() {
 
         await sendEmail(data.email, "Payment Failed", "Payment Unsuccessful", structureEmail);
     });
-  });
-};
+
+
+   subcribeToQueue("product_notified_for_seller",async (data) => {
+    const structureEmail  = `
+    <h1>Product Notification</h1>
+    <p>Dear ${data.seller},</p>
+    <p>We wanted to inform you that your product "${data.title}" has received a new notification.</p>
+    <p>Please check your seller dashboard for more details.</p>
+    <p>Best regards,<br>Easy Shop</p>`
+
+    await sendEmail(data.email, "Product Notification", "New Notification for Your Product", structureEmail);
+   })
+
+   
+
+}

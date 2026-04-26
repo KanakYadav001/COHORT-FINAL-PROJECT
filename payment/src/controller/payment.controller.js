@@ -38,6 +38,8 @@ async function createPayment(req, res) {
       },
     });
 
+    publishToQueue("payment_created_for_seller", newPayment);
+
     res
       .status(201)
       .json({ message: "Payment created successfully", payment: newPayment });
@@ -83,13 +85,17 @@ async function verifyPayment(req, res) {
 
   
     
-
+  await Promise.all([
     publishToQueue("payment_success_notification.user", {
       userId: payment.user,
       price: payment.price,
       rozopayOrderId: razorpayOrderId,
       rozopayPaymentId: razorpayPaymentId,
-    });
+    }),
+   
+    publishToQueue("payment_updated_for_seller",payment)
+
+  ]);
 
     res.json({ message: "Payment verified successfully" });
   } catch (error) {
