@@ -15,7 +15,9 @@ const sendEmail = require('./mail');
 
 
 app.get('/', (req, res) => {
-    res.send('Notification Service is running');
+    res.status(200).json({
+        message: "Notification API is running"
+    })
 });
 
 
