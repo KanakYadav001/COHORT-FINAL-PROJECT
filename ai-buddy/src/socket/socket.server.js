@@ -40,7 +40,7 @@ async function integrateSocket(httpsServer) {
     socket.chatHistory.push(
       new SystemMessage(`You are a shopping assistant.
 
-RULES:
+RULES:.e
 1. Call ONLY one tool at a time
 2. First search → then wait → then add to cart
 3. Always return product ID
